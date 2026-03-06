@@ -8,12 +8,10 @@ Stores an encrypted master key in **Google Drive** (appDataFolder) or **iCloud**
 ## Installation
 
 ```bash
-npm install @tetherto/wdk-backup-cloud-react-native
-# iCloud support also requires:
-npm install react-native-cloud-storage
+npm install @tetherto/wdk-backup-cloud-react-native react-native-cloud-storage
 ```
 
-> **Expo note**: `react-native-cloud-storage` requires native modules. Use a [custom dev build](https://docs.expo.dev/develop/development-builds/introduction/) — it does NOT work with Expo Go.
+> **Expo note**: the bundled Google Drive and iCloud providers depend on `react-native-cloud-storage`, which requires native modules. Use a [custom dev build](https://docs.expo.dev/develop/development-builds/introduction/) — it does NOT work with Expo Go.
 
 ---
 
@@ -97,7 +95,7 @@ try {
   if (err instanceof CloudValidationError) {
     // Empty or invalid key passed by caller
   } else if (err instanceof CloudAuthError) {
-    // Token expired / user not signed in to iCloud → refresh and retry
+    // Re-authenticate (refresh token or prompt sign-in) and retry
   } else if (err instanceof CloudUnavailableError) {
     // No network, iCloud disabled, Drive service down
   } else if (err instanceof CloudStorageError) {
@@ -164,7 +162,7 @@ interface ICloudConfig {
 }
 ```
 
-- Requires `react-native-cloud-storage` peer dependency
+- Uses `react-native-cloud-storage` (install it alongside this package)
 - Uses `CloudStorageScope.AppData` (app-specific hidden folder)
 - Checks iCloud availability before every operation
 - Verifies file existence after every write
@@ -234,7 +232,7 @@ Both providers write the same JSON payload (`CloudEncryptionKeyFile`):
 
 - **Never logs** the encrypted key or access token
 - **No AsyncStorage** — entirely in-request-lifecycle
-- **No singletons** — providers are stateless
+- **No local persistence** — this SDK does not store backups outside provider calls
 - **No OAuth flows** implemented — the caller owns credential management
 - Error messages strip sensitive values
 
@@ -244,7 +242,8 @@ Both providers write the same JSON payload (`CloudEncryptionKeyFile`):
 
 ```bash
 npm run build    # Outputs dist/ (CJS + ESM + .d.ts)
-npm test         # Jest (90%+ coverage required)
+npm test         # Jest test suite
+npm run test:coverage # Coverage report with thresholds
 npm run typecheck # tsc --noEmit
 ```
 
@@ -274,7 +273,7 @@ npm run build
 npm publish --access public
 ```
 
-Consumers using `^1.0.0` will receive patch/minor updates automatically on `npm install`.
+Once the package reaches `1.0.0`, consumers using `^1.0.0` will receive patch/minor updates automatically on `npm install`.
 
 ---
 

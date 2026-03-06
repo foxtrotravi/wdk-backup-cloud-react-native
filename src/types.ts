@@ -22,7 +22,8 @@
 
 /**
  * Abstraction over any cloud storage backend.
- * Implementations must be stateless between calls (no singleton caches).
+ * Implementations should expose cloud operations without persisting backup
+ * data locally inside this SDK.
  */
 export interface CloudProvider {
   /**

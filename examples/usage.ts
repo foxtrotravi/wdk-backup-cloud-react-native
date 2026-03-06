@@ -2,8 +2,9 @@
  * @tetherto/wdk-backup-cloud-react-native
  * Integration usage example.
  *
- * This file is for demonstration purposes— it requires peer deps
- * (react-native-cloud-storage) and a valid OAuth token at runtime.
+ * This file is for demonstration purposes. It requires
+ * `react-native-cloud-storage` at runtime, and the Google Drive examples
+ * also require a valid OAuth token.
  */
 
 import {
@@ -77,7 +78,7 @@ async function backupWithGoogleDrive(
 // =============================================================================
 
 async function backupWithICloud(encryptedKey: string): Promise<void> {
-  const provider = new ICloudProvider(); // default path: /wallet/wallet_backup_key.json
+  const provider = new ICloudProvider(); // default path: wallet_backup_key.json
   const cloud = new CloudBackup(provider);
 
   const available = await cloud.isAvailable();
@@ -110,12 +111,12 @@ async function backupWithICloud(encryptedKey: string): Promise<void> {
 }
 
 // =============================================================================
-// Example 3 — Full flow: backend upload + cloud backup (see @wallet/backup-backend)
+// Example 3 — Full flow: backend upload + cloud backup (see @tetherto/wdk-backup-remote)
 // =============================================================================
 
 /**
  * Demonstrates how the two packages fit together.
- * BackendBackupClient is from @wallet/backup-backend (not shown here).
+ * BackendBackupClient is from @tetherto/wdk-backup-remote (not shown here).
  */
 async function fullBackupFlow(
   accessToken: string,
