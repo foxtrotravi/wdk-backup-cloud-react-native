@@ -337,4 +337,4 @@ const backup = await cloud.downloadEncryptedKey(); // CloudEncryptionKeyFile | n
 
 ## License
 
-MIT
+Apache-2.0
